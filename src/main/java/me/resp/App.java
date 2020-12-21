@@ -37,6 +37,7 @@ public class App
         // Add play book name at last.
         commands.add("install-algo-to.yml");
 
+        commands.add("-vvv");
         builder.command(commands);
         builder.redirectErrorStream(true);
 //        builder.directory(new File(getWorkingDirectory()));
