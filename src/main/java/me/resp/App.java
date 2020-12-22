@@ -1,10 +1,11 @@
 package me.resp;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -57,13 +58,24 @@ public class App {
     }
     builder.command(commands);
     builder.redirectErrorStream(true);
-//        builder.directory(new File(getWorkingDirectory()));
+    // builder.directory(new File(getWorkingDirectory()));
+
     Process process = builder.start();
-    StreamGobbler streamGobbler =
-        new StreamGobbler(process.getInputStream(), line -> {
-          printout(line);
-        });
-    Executors.newSingleThreadExecutor().submit(streamGobbler);
+    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+    String line = null;
+    while ((line = reader.readLine()) != null) {
+      log.info("line: {}", line);
+    }
+
+    // StreamGobbler streamGobbler =
+    // new StreamGobbler(process.getInputStream(), line -> {
+    // if (line == null) {
+    // return;
+    // }
+    // log.info("line: {}", line);
+    // });
+    // Executors.newSingleThreadExecutor().submit(streamGobbler);
     int exit = process.waitFor();
     printout(exit);
   }
